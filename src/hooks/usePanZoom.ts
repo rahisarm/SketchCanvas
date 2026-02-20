@@ -10,7 +10,7 @@ interface Options {
   setPan: (fn: (p: Point) => Point) => void
 }
 
-export function usePanZoom({ canvasRef, zoom, pan, setZoom, setPan }: Options) {
+export function usePanZoom({ canvasRef, setZoom, setPan }: Options) {
   useEffect(() => {
     const el = canvasRef.current
     if (!el) return

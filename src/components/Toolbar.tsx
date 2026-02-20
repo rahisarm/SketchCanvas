@@ -1,4 +1,4 @@
-import React from 'react'
+// React
 import type { ToolType } from '../types'
 
 const COLORS = [
@@ -16,14 +16,14 @@ interface Props {
 }
 
 const TOOLS: { id: ToolType; icon: string; label: string }[] = [
-  { id: 'select',   icon: '↖',  label: 'Select (V)' },
+  { id: 'select', icon: '↖', label: 'Select (V)' },
   { id: 'freehand', icon: '✏️', label: 'Freehand (F)' },
-  { id: 'rect',     icon: '▭',  label: 'Rectangle (R)' },
-  { id: 'ellipse',  icon: '⬭',  label: 'Ellipse (E)' },
-  { id: 'arrow',    icon: '→',  label: 'Arrow (A)' },
-  { id: 'line',     icon: '╱',  label: 'Line (L)' },
-  { id: 'text',     icon: 'T',  label: 'Text (T)' },
-  { id: 'eraser',   icon: '⌫',  label: 'Eraser (X)' },
+  { id: 'rect', icon: '▭', label: 'Rectangle (R)' },
+  { id: 'ellipse', icon: '⬭', label: 'Ellipse (E)' },
+  { id: 'arrow', icon: '→', label: 'Arrow (A)' },
+  { id: 'line', icon: '╱', label: 'Line (L)' },
+  { id: 'text', icon: 'T', label: 'Text (T)' },
+  { id: 'eraser', icon: '⌫', label: 'Eraser (X)' },
 ]
 
 const SEP = <div style={{ width: 1, height: 24, background: '#1a1a2e', margin: '0 4px', opacity: 0.3 }} />

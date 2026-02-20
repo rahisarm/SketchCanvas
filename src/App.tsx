@@ -562,7 +562,7 @@ export default function App() {
 
       {/* Zoom controls */}
       <ZoomControls
-        zoom={zoom} sidebarOpen={sidebarOpen} shapes={shapes}
+        zoom={zoom} sidebarOpen={sidebarOpen}
         onZoomIn={() => setZoom(z => Math.min(30, z * 1.25))}
         onZoomOut={() => setZoom(z => Math.max(0.05, z * 0.8))}
         onReset={() => { setZoom(() => 1); setPan(() => ({ x: 0, y: 0 })) }}

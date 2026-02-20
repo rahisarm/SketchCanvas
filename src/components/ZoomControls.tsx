@@ -1,18 +1,13 @@
-import React from 'react'
-import type { Shape, Point } from '../types'
-import { getBoundingBox } from '../shapes/geometry'
-
 interface Props {
   zoom: number
   sidebarOpen: boolean
-  shapes: Shape[]
   onZoomIn: () => void
   onZoomOut: () => void
   onReset: () => void
   onFitContent: () => void
 }
 
-export default function ZoomControls({ zoom, sidebarOpen, shapes, onZoomIn, onZoomOut, onReset, onFitContent }: Props) {
+export default function ZoomControls({ zoom, sidebarOpen, onZoomIn, onZoomOut, onReset, onFitContent }: Props) {
   return (
     <div style={{
       position: 'absolute', bottom: 20,
