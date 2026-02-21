@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react'
+import { useRef, useState, useEffect, useCallback } from 'react'
 import { useDrawingStore } from './store/useDrawingStore'
 import { renderAll } from './shapes/render'
 import { getCombinedBB } from './shapes/geometry'

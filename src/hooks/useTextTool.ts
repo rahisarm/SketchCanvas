@@ -2,7 +2,7 @@ import { useState, useRef, useCallback, type RefObject } from 'react'
 import { useDrawingStore } from '../store/useDrawingStore'
 import { getPos, pointInShape } from '../shapes/geometry'
 import { uid, randomSeed } from '../utils/uid'
-import type { Shape, Point } from '../types'
+import type { Shape } from '../types'
 
 export function useTextTool(canvasRef: RefObject<HTMLCanvasElement | null>) {
     const [textInput, setTextInput] = useState<{ x: number; y: number; sx: number; sy: number } | null>(null)
