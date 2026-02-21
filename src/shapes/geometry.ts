@@ -1,5 +1,31 @@
 import type { Shape, BoundingBox, ResizeHandle, Point } from '../types'
 
+export function getPos(e: React.MouseEvent, canvas: HTMLCanvasElement, pan: Point, zoom: number) {
+  const rect = canvas.getBoundingClientRect()
+  const sx = e.clientX - rect.left
+  const sy = e.clientY - rect.top
+  const { x, y } = screenToCanvas(sx, sy, pan, zoom)
+  return { sx, sy, x, y }
+}
+
+export function getHandleAt(
+  sx: number, sy: number,
+  selectedIds: string[],
+  shapes: Shape[],
+  pan: Point, zoom: number
+) {
+  if (selectedIds.length === 0) return null
+  const sel = shapes.filter(s => selectedIds.includes(s.id))
+  const bb = sel.length === 1 ? getBoundingBox(sel[0]) : getCombinedBB(sel)
+  const pad = 9
+  const screenBB = {
+    x: bb.x * zoom + pan.x - pad, y: bb.y * zoom + pan.y - pad,
+    w: bb.w * zoom + pad * 2, h: bb.h * zoom + pad * 2,
+  }
+  const handles = getResizeHandles(screenBB)
+  return handles.find(h => Math.hypot(sx - h.x, sy - h.y) < 9) ?? null
+}
+
 export function getBoundingBox(shape: Shape): BoundingBox {
   if (shape.type === 'freehand') {
     if (!shape.points || shape.points.length === 0) return { x: 0, y: 0, w: 0, h: 0 }
@@ -20,7 +46,9 @@ export function getBoundingBox(shape: Shape): BoundingBox {
       h: Math.abs(shape.h),
     }
   }
-  return { x: shape.x, y: shape.y, w: Math.abs(shape.w), h: Math.abs(shape.h) }
+  const w = shape.w ?? 0
+  const h = shape.h ?? (shape.type === 'text' ? (shape.fontSize || 20) : 0)
+  return { x: shape.x, y: shape.y, w: Math.abs(w), h: Math.abs(h) }
 }
 
 export function pointInShape(px: number, py: number, shape: Shape): boolean {

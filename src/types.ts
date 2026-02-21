@@ -42,6 +42,10 @@ export interface Shape {
   // text
   text?: string
   fontSize?: number
+  fontFamily?: string
+  fontWeight?: string
+  fontStyle?: string
+  textAlign?: 'left' | 'center' | 'right'
   imageUrl?: string
   noBorder?: boolean
 }

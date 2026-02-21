@@ -81,12 +81,23 @@ export function renderShape(rc: RoughCanvas, ctx: CanvasRenderingContext2D, shap
     }
 
     case 'text': {
-      ctx.font = `${shape.fontSize || 20}px 'Caveat', cursive`
+      const fontSize = shape.fontSize || 20
+      const fontFamily = shape.fontFamily || "'Caveat', cursive"
+      const fontWeight = shape.fontWeight || 'normal'
+      const fontStyle = shape.fontStyle || 'normal'
+      ctx.font = `${fontStyle} ${fontWeight} ${fontSize}px ${fontFamily}`
       ctx.fillStyle = shape.strokeColor || '#1a1a2e'
       ctx.textBaseline = 'top'
-        ; (shape.text || '').split('\n').forEach((line, i) => {
-          ctx.fillText(line, shape.x, shape.y + i * (shape.fontSize || 20) * 1.3)
-        })
+      ctx.textAlign = shape.textAlign || 'left'
+
+      const lines = (shape.text || '').split('\n')
+      lines.forEach((line, i) => {
+        let lx = shape.x
+        const w = shape.w || 0
+        if (ctx.textAlign === 'center') lx = shape.x + w / 2
+        else if (ctx.textAlign === 'right') lx = shape.x + w
+        ctx.fillText(line, lx, shape.y + i * fontSize * 1.2)
+      })
       break
     }
 

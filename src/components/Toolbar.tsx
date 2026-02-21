@@ -37,6 +37,7 @@ export default function Toolbar({ tool, strokeColor, strokeWidth, onTool, onColo
         background: '#faf9f6', border: '2px solid #1a1a2e',
         borderRadius: 10, boxShadow: '3px 3px 0 #1a1a2e',
         zIndex: 50, alignItems: 'center',
+        maxWidth: '95vw', flexWrap: 'wrap', justifyContent: 'center'
       }}
     >
       {TOOLS.map(tb => (

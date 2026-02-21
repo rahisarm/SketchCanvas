@@ -20,6 +20,10 @@ interface Props {
   selectedIds: string[]
   fillColor: string
   fontSize: number
+  fontFamily: string
+  fontWeight: string
+  fontStyle: string
+  textAlign: 'left' | 'center' | 'right'
   backgroundSettings: BackgroundSettings
   snapToGrid: boolean
   onSelectShape: (id: string) => void
@@ -27,15 +31,22 @@ interface Props {
   onDeleteSelected: () => void
   onFillColor: (c: string) => void
   onFontSize: (s: number) => void
+  onFontFamily: (f: string) => void
+  onFontWeight: (w: string) => void
+  onFontStyle: (s: string) => void
+  onTextAlign: (a: 'left' | 'center' | 'right') => void
   onAddLibrary: (item: LibraryItem) => void
   onBackgroundSettings: (s: Partial<BackgroundSettings>) => void
   onSnapToGrid: (v: boolean) => void
 }
 
 export default function Sidebar({
-  visible, shapes, selectedIds, fillColor, fontSize, backgroundSettings, snapToGrid,
+  visible, shapes, selectedIds, fillColor, fontSize,
+  fontFamily, fontWeight, fontStyle, textAlign,
+  backgroundSettings, snapToGrid,
   onSelectShape, onDeleteShape, onDeleteSelected,
-  onFillColor, onFontSize, onAddLibrary, onBackgroundSettings, onSnapToGrid,
+  onFillColor, onFontSize, onFontFamily, onFontWeight, onFontStyle, onTextAlign,
+  onAddLibrary, onBackgroundSettings, onSnapToGrid,
 }: Props) {
   const [showLib, setShowLib] = useState(false)
   const [showShortcuts, setShowShortcuts] = useState(false)
@@ -52,16 +63,32 @@ export default function Sidebar({
     return LIBRARY_SHAPES.filter(ls => ls.name.toLowerCase().includes(q))
   }, [search])
 
-  if (!visible) return null
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+
+  if (!visible && !isMobile) return null
 
   return (
     <div style={{
-      position: 'absolute', top: 0, right: 0, width: 252, height: '100vh',
+      position: 'absolute', top: 0, right: visible ? 0 : -252, width: 252, height: '100vh',
       background: '#faf9f6', borderLeft: '2px solid #1a1a2e',
       boxShadow: '-3px 0 0 #1a1a2e',
-      zIndex: 40, display: 'flex', flexDirection: 'column',
+      transition: 'right 0.3s ease-in-out',
+      zIndex: 1000, display: 'flex', flexDirection: 'column',
       fontFamily: "'Caveat', cursive",
     }}>
+      {/* Mobile Close Button */}
+      {isMobile && visible && (
+        <button
+          onClick={() => onSelectShape('')} // Just a hack to trigger something or pass onToggle
+          style={{
+            position: 'absolute', left: -40, top: 12, width: 32, height: 32,
+            background: '#faf9f6', border: '2px solid #1a1a2e', borderRadius: '50%',
+            display: 'flex', alignItems: 'center', justifyItems: 'center', cursor: 'pointer',
+            boxShadow: '2px 2px 0 #1a1a2e'
+          }}
+          onClickCapture={(e) => { e.stopPropagation(); (onSelectShape as any)('CLOSE_SIDEBAR') }}
+        >✕</button>
+      )}
 
       {/* ── Style ── */}
       <div style={{ padding: '14px 14px 10px', borderBottom: '1px solid #e8e4dc' }}>
@@ -83,11 +110,56 @@ export default function Sidebar({
           <input type="color" value={fillColor === 'none' ? '#ffffff' : fillColor}
             onChange={e => onFillColor(e.target.value)} style={{ width: 22, height: 22 }} />
         </div>
-        <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-          <span style={{ fontSize: 13, color: '#666', minWidth: 32 }}>Font</span>
+        <div style={{ display: 'flex', gap: 6, alignItems: 'center', marginBottom: 8 }}>
+          <span style={{ fontSize: 13, color: '#666', minWidth: 32 }}>Size</span>
           <input type="range" min={12} max={72} step={2} value={fontSize}
             onChange={e => onFontSize(Number(e.target.value))} style={{ flex: 1 }} />
           <span style={{ fontSize: 12, color: '#888', minWidth: 22 }}>{fontSize}</span>
+        </div>
+        <div style={{ display: 'flex', gap: 6, alignItems: 'center', marginBottom: 8 }}>
+          <span style={{ fontSize: 13, color: '#666', minWidth: 32 }}>Font</span>
+          <select
+            value={fontFamily}
+            onChange={e => onFontFamily(e.target.value)}
+            style={{
+              flex: 1, padding: '2px 4px', fontSize: 13,
+              fontFamily: "'Caveat', cursive", background: '#f0ede8', border: '1px solid #1a1a2e'
+            }}
+          >
+            <option value="'Caveat', cursive">Handdrawn</option>
+            <option value="Inter, sans-serif">Sans-serif</option>
+            <option value="Georgia, serif">Serif</option>
+            <option value="'Fira Code', monospace">Monospace</option>
+          </select>
+        </div>
+        <div style={{ display: 'flex', gap: 4, marginBottom: 8 }}>
+          <div style={{ display: 'flex', flex: 1, gap: 4 }}>
+            <button
+              onClick={() => onFontWeight(fontWeight === 'bold' ? 'normal' : 'bold')}
+              className="sketchy-btn"
+              style={{ flex: 1, fontWeight: 'bold', border: fontWeight === 'bold' ? '2px solid #3b82f6' : '1px solid #1a1a2e' }}
+            >B</button>
+            <button
+              onClick={() => onFontStyle(fontStyle === 'italic' ? 'normal' : 'italic')}
+              className="sketchy-btn"
+              style={{ flex: 1, fontStyle: 'italic', border: fontStyle === 'italic' ? '2px solid #3b82f6' : '1px solid #1a1a2e' }}
+            >I</button>
+          </div>
+          <div style={{ display: 'flex', flex: 2, gap: 4 }}>
+            {(['left', 'center', 'right'] as const).map(a => (
+              <button
+                key={a}
+                onClick={() => onTextAlign(a)}
+                className="sketchy-btn"
+                style={{
+                  flex: 1, fontSize: 10,
+                  border: textAlign === a ? '2px solid #3b82f6' : '1px solid #1a1a2e'
+                }}
+              >
+                {a === 'left' ? '⌸' : a === 'center' ? '⌺' : '⌹'}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 

@@ -31,6 +31,10 @@ interface DrawingState {
   strokeWidth: number
   fillColor: string
   fontSize: number
+  fontFamily: string
+  fontWeight: string
+  fontStyle: string
+  textAlign: 'left' | 'center' | 'right'
   selectedIds: string[]
   zoom: number
   pan: Point
@@ -43,6 +47,10 @@ interface DrawingState {
   setStrokeWidth: (w: number) => void
   setFillColor: (c: string) => void
   setFontSize: (s: number) => void
+  setFontFamily: (f: string) => void
+  setFontWeight: (w: string) => void
+  setFontStyle: (s: string) => void
+  setTextAlign: (a: 'left' | 'center' | 'right') => void
   setSelectedIds: (ids: string[]) => void
   setZoom: (z: number | ((prev: number) => number)) => void
   setPan: (p: Point | ((prev: Point) => Point)) => void
@@ -74,6 +82,10 @@ export const useDrawingStore = create<DrawingState>((set, get) => ({
   strokeWidth: 2,
   fillColor: 'none',
   fontSize: 20,
+  fontFamily: "'Caveat', cursive",
+  fontWeight: 'normal',
+  fontStyle: 'normal',
+  textAlign: 'left',
   selectedIds: [],
   zoom: 1,
   pan: { x: 0, y: 0 },
@@ -86,6 +98,10 @@ export const useDrawingStore = create<DrawingState>((set, get) => ({
   setStrokeWidth: w => set({ strokeWidth: w }),
   setFillColor: c => set({ fillColor: c }),
   setFontSize: s => set({ fontSize: s }),
+  setFontFamily: f => set({ fontFamily: f }),
+  setFontWeight: w => set({ fontWeight: w }),
+  setFontStyle: s => set({ fontStyle: s }),
+  setTextAlign: a => set({ textAlign: a }),
   setSelectedIds: ids => set({ selectedIds: ids }),
   setZoom: z => set(s => ({ zoom: typeof z === 'function' ? z(s.zoom) : z })),
   setPan: p => set(s => ({ pan: typeof p === 'function' ? p(s.pan) : p })),
